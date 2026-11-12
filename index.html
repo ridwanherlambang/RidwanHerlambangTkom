@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Ridwan Herlambang | Teknik Komputer UNNES</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --bg: #050508;
+        --bg-2: #0a0a10;
+        --card: rgba(20, 20, 28, 0.65);
+        --border: rgba(251, 191, 36, 0.15);
+        --amber: #fbbf24;
+        --amber-2: #f59e0b;
+        --cyan: #06b6d4;
+        --cyan-2: #22d3ee;
+        --electric: #00e5ff;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --gold: #ffd700;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: 'Space Grotesk', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* ============ BACKGROUND GRID SIRKUIT ============ */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(251, 191, 36, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(251, 191, 36, 0.04) 1px, transparent 1px);
+        background-size: 50px 50px;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* ============ GLOW ORBS ============ */
+    .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.25;
+        z-index: 0;
+        pointer-events: none;
+        animation: floatOrb 18s ease-in-out infinite;
+    }
+    .orb-1 { width: 500px; height: 500px; background: var(--amber); top: -150px; left: -150px; }
+    .orb-2 { width: 450px; height: 450px; background: var(--cyan); bottom: -120px; right: -120px; animation-delay: -6s; }
+    .orb-3 { width: 350px; height: 350px; background: var(--electric); top: 45%; right: 25%; animation-delay: -12s; opacity: 0.15; }
+
+    @keyframes floatOrb {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(40px, -40px) scale(1.1); }
+        66% { transform: translate(-30px, 30px) scale(0.9); }
+    }
+
+    /* ============ CANVAS PARTIKEL ELEKTRON ============ */
+    #particles {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* ============ CURSOR SPARK ============ */
+    .cursor-spark {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: var(--amber);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 20px var(--amber), 0 0 40px var(--amber-2);
+        transition: width 0.2s, height 0.2s;
+    }
+
+    .cursor-spark::after {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(251, 191, 36, 0.3), transparent 70%);
+        animation: sparkPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes sparkPulse {
+        0%, 100% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.4); opacity: 1; }
+    }
+
+    /* ============ CONTAINER ============ */
+    .container {
+        position: relative;
+        z-index: 2;
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 60px 20px 40px;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+        background: var(--card);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 55px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.8s ease;
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(251, 191, 36, 0.1);
+    }
+
+    /* Garis listrik atas */
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--amber), var(--electric), var(--cyan), transparent);
+        animation: electricShine 3s linear infinite;
+        box-shadow: 0 0 20px var(--amber);
+    }
+
+    @keyframes electricShine { to { left: 100%; } }
+
+    /* Sudut listrik */
+    .hero::after {
+        content: '⚡';
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 24px;
+        color: var(--amber);
+        animation: boltFlicker 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 10px var(--amber));
+    }
+
+    @keyframes boltFlicker {
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============ AVATAR ============ */
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 28px;
+    }
+
+    .avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #1a1a2e, #0a0a15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 56px;
+        font-weight: 700;
+        font-family: 'Orbitron', sans-serif;
+        color: var(--amber);
+        position: relative;
+        z-index: 2;
+        border: 2px solid rgba(251, 191, 36, 0.4);
+        box-shadow:
+            0 0 40px rgba(251, 191, 36, 0.4),
+            inset 0 0 30px rgba(251, 191, 36, 0.1);
+        text-shadow: 0 0 20px var(--amber);
+        animation: avatarGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes avatarGlow {
+        0%, 100% {
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.4), inset 0 0 30px rgba(251, 191, 36, 0.1);
+        }
+        50% {
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.6), inset 0 0 40px rgba(6, 182, 212, 0.15);
+        }
+    }
+
+    .avatar-ring {
+        position: absolute;
+        inset: -15px;
+        border-radius: 50%;
+        border: 2px dashed rgba(251, 191, 36, 0.5);
+        animation: spin 15s linear infinite;
+    }
+
+    .avatar-ring-2 {
+        position: absolute;
+        inset: -22px;
+        border-radius: 50%;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        animation: spin 25s linear infinite reverse;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-dot {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        background: var(--amber);
+        border-radius: 50%;
+        border: 4px solid var(--bg);
+        z-index: 3;
+        animation: boltBlink 1.5s ease-in-out infinite;
+        box-shadow: 0 0 20px var(--amber);
+    }
+
+    @keyframes boltBlink {
+        0%, 100% { opacity: 1; box-shadow: 0 0 20px var(--amber); }
+        50% { opacity: 0.5; box-shadow: 0 0 30px var(--cyan); background: var(--cyan); }
+    }
+
+    /* ============ NAMA ============ */
+    .hero h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(22px, 4.5vw, 36px);
+        font-weight: 900;
+        margin-bottom: 14px;
+        background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #22d3ee 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.3));
+    }
+
+    .subtitle {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--amber);
+        font-size: 14px;
+        margin-bottom: 22px;
+        min-height: 22px;
+        letter-spacing: 1px;
+    }
+
+    .cursor-blink {
+        display: inline-block;
+        width: 8px;
+        height: 16px;
+        background: var(--amber);
+        margin-left: 3px;
+        vertical-align: middle;
+        animation: blinkCursor 1s step-end infinite;
+        box-shadow: 0 0 10px var(--amber);
+    }
+
+    @keyframes blinkCursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+
+    .nim-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+        color: var(--amber);
+        padding: 10px 22px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 1px;
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.15);
+    }
+
+    .nim-badge::before {
+        content: '⚡';
+        font-size: 16px;
+        animation: boltFlicker 2s ease-in-out infinite;
+    }
+
+    /* ============ CARD SECTION ============ */
+    .card {
+        background: var(--card);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 35px;
+        margin-top: 24px;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease, transform 0.8s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card.reveal {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--amber), var(--cyan), transparent);
+        opacity: 0.6;
+    }
+
+    /* Efek hover: sengatan listrik */
+    .card:hover {
+        border-color: rgba(251, 191, 36, 0.4);
+        box-shadow: 0 15px 50px rgba(251, 191, 36, 0.12), inset 0 0 40px rgba(251, 191, 36, 0.03);
+    }
+
+    /* Sudut listrik dekoratif pada card */
+    .card::after {
+        content: '';
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        border-right: 2px solid var(--amber);
+        border-bottom: 2px solid var(--amber);
+        opacity: 0.3;
+        border-radius: 0 0 8px 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .card:hover::after {
+        opacity: 0.8;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: white;
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 1px;
+    }
+
+    .section-title .icon {
+        font-size: 22px;
+        filter: drop-shadow(0 0 8px var(--amber));
+        animation: boltFlicker 3s ease-in-out infinite;
+    }
+
+    .section-title .line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(251, 191, 36, 0.6), transparent);
+    }
+
+    .card p {
+        line-height: 1.9;
+        color: var(--muted);
+        font-size: 15px;
+    }
+
+    .card p strong {
+        color: var(--amber);
+        font-weight: 600;
+    }
+
+    /* ============ INFO GRID ============ */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .info-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(251, 191, 36, 0.1);
+        border-radius: 14px;
+        padding: 18px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, var(--amber), var(--cyan));
+        box-shadow: 0 0 10px var(--amber);
+    }
+
+    .info-item:hover {
+        transform: translateY(-4px);
+        border-color: rgba(251, 191, 36, 0.4);
+        box-shadow: 0 10px 35px rgba(251, 191, 36, 0.2);
+        background: rgba(251, 191, 36, 0.04);
+    }
+
+    .info-label {
+        font-size: 11px;
+        color: var(--amber);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-family: 'JetBrains Mono', monospace;
+        margin-bottom: 6px;
+        opacity: 0.8;
+    }
+
+    .info-value {
+        font-size: 15px;
+        color: white;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    /* ============ SKILL (SIRKUIT) ============ */
+    .skill { margin-bottom: 22px; }
+
+    .skill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .skill-name {
+        color: white;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .skill-status {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.5px;
+    }
+
+    .status-primary {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--amber);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+    }
+
+    .status-learning {
+        background: rgba(6, 182, 212, 0.15);
+        color: var(--cyan);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    }
+
+    .skill-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid rgba(251, 191, 36, 0.1);
+    }
+
+    .skill-fill {
+        height: 100%;
+        border-radius: 10px;
+        width: 0;
+        transition: width 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        background: linear-gradient(90deg, var(--amber-2), var(--amber), var(--cyan));
+        box-shadow: 0 0 15px var(--amber);
+    }
+
+    .skill-fill::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 15px var(--amber), 0 0 30px var(--amber);
+        animation: nodePulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes nodePulse {
+        0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+        50% { opacity: 0.7; transform: translateY(-50%) scale(1.3); }
+    }
+
+    /* ============ HOBI TAGS ============ */
+    .hobi-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .hobi-tag {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        color: var(--text);
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: default;
+    }
+
+    .hobi-tag:hover {
+        background: linear-gradient(135deg, var(--amber-2), var(--amber));
+        border-color: var(--amber);
+        color: #000;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
+    }
+
+    /* ============ KEGIATAN GRID ============ */
+    .kegiatan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+    }
+
+    .kegiatan-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(251, 191, 36, 0.12);
+        border-radius: 16px;
+        padding: 22px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kegiatan-item::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.1), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .kegiatan-item:hover {
+        transform: translateY(-5px);
+        border-color: rgba(251, 191, 36, 0.4);
+        box-shadow: 0 15px 40px rgba(251, 191, 36, 0.15);
+    }
+
+    .kegiatan-item:hover::before {
+        opacity: 1;
+    }
+
+    .kegiatan-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .kegiatan-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(6, 182, 212, 0.15));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .kegiatan-item:hover .kegiatan-icon {
+        box-shadow: 0 0 20px var(--amber);
+        transform: rotate(-5deg) scale(1.1);
+    }
+
+    .kegiatan-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--amber);
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 0.5px;
+    }
+
+    .kegiatan-desc {
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: var(--muted);
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ============ CITA-CITA ============ */
+    .cita-cita {
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(6, 182, 212, 0.05));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 22px;
+        padding: 40px 35px;
+        margin-top: 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .cita-cita.reveal {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cita-cita::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.15), transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.1), transparent 40%);
+        pointer-events: none;
+    }
+
+    .cita-cita-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        display: inline-block;
+        filter: drop-shadow(0 0 20px var(--amber));
+        animation: rocketFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes rocketFloat {
+        0%, 100% { transform: translateY(0) rotate(-5deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .cita-cita h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--amber);
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    }
+
+    .cita-cita p {
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.9;
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cita-cita p strong {
+        color: var(--cyan);
+        font-weight: 600;
+    }
+
+    /* ============ FOOTER ============ */
+    footer {
+        text-align: center;
+        padding: 45px 20px 25px;
+        color: var(--muted);
+        font-size: 13px;
+        font-family: 'JetBrains Mono', monospace;
+        position: relative;
+        z-index: 2;
+    }
+
+    footer .bolt {
+        color: var(--amber);
+        animation: boltFlicker 1.5s ease-in-out infinite;
+        display: inline-block;
+        filter: drop-shadow(0 0 8px var(--amber));
+    }
+
+    /* ============ SCROLLBAR ============ */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, var(--amber), var(--cyan));
+        border-radius: 10px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 600px) {
+        .container { padding: 30px 14px 20px; }
+        .hero { padding: 35px 22px; border-radius: 22px; }
+        .card { padding: 25px 20px; border-radius: 18px; }
+        .cita-cita { padding: 30px 22px; border-radius: 18px; }
+        .avatar { width: 110px; height: 110px; font-size: 44px; }
+        .section-title { font-size: 16px; }
+        .cita-cita h2 { font-size: 18px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<canvas id="particles"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="cursor-spark" id="cursorSpark"></div>
+
+<div class="container">
+
+    <!-- ============ HERO ============ -->
+    <div class="hero">
+        <div class="avatar-wrapper">
+            <div class="avatar-ring"></div>
+            <div class="avatar-ring-2"></div>
+            <div class="avatar">MR</div>
+            <div class="status-dot"></div>
+        </div>
+        <h1>Muhammad Ridwan Herlambang</h1>
+        <div class="subtitle">
+            <span id="typed"></span><span class="cursor-blink"></span>
+        </div>
+        <div class="nim-badge">NIM · 2405110042</div>
+    </div>
+
+    <!-- ============ DATA DIRI ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">🎓</span>
+            <span>Data Diri Akademik</span>
+            <span class="line"></span>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Universitas</div>
+                <div class="info-value">Universitas Negeri Semarang</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Fakultas</div>
+                <div class="info-value">Fakultas Teknik</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Program Studi</div>
+                <div class="info-value">Teknik Komputer</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">NIM</div>
+                <div class="info-value">2405110042</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TENTANG SAYA ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">👤</span>
+            <span>Tentang Saya</span>
+            <span class="line"></span>
+        </div>
+        <p>
+            Mahasiswa <strong>semester 5</strong> Program Studi Teknik Komputer,
+            <strong>Universitas Negeri Semarang</strong> yang memiliki fondasi kuat dalam
+            rekayasa perangkat keras, jaringan komputer, dan pemrograman. Terbiasa
+            menyelesaikan masalah teknis secara terstruktur melalui berbagai proyek
+            praktikum dan kolaborasi tim. Memiliki semangat belajar yang tinggi serta
+            siap mengaplikasikan keahlian teknis untuk mendukung efisiensi dan inovasi
+            teknologi.
+        </p>
+    </div>
+
+    <!-- ============ INFORMASI PRIBADI ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">🆔</span>
+            <span>Informasi Pribadi</span>
+            <span class="line"></span>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Nama Lengkap</div>
+                <div class="info-value">Muhammad Ridwan Herlambang</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">NIM</div>
+                <div class="info-value">2405110042</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Status</div>
+                <div class="info-value">Mahasiswa Aktif</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Program Studi</div>
+                <div class="info-value">Teknik Komputer</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ BIDANG IT ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">💻</span>
+            <span>Bidang IT yang Ingin Didalami</span>
+            <span class="line"></span>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <span class="skill-name">HTML</span>
+                <span class="skill-status status-primary">Fokus Utama</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-width="90%"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <span class="skill-name">CSS</span>
+                <span class="skill-status status-primary">Fokus Utama</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <span class="skill-name">JavaScript</span>
+                <span class="skill-status status-learning">Sedang Belajar</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-width="60%"></div></div>
+        </div>
+
+        <div class="skill">
+            <div class="skill-header">
+                <span class="skill-name">Responsive Web Design</span>
+                <span class="skill-status status-learning">Sedang Belajar</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-width="55%"></div></div>
+        </div>
+    </div>
+
+    <!-- ============ MINAT & HOBI ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">🎯</span>
+            <span>Minat &amp; Hobi</span>
+            <span class="line"></span>
+        </div>
+        <div class="hobi-list">
+            <span class="hobi-tag">🏍️ Otomotif</span>
+            <span class="hobi-tag">🎵 Musik</span>
+            <span class="hobi-tag">🎮 Gaming</span>
+            <span class="hobi-tag">🛣️ Touring</span>
+            <span class="hobi-tag">🎤 Bernyanyi</span>
+            <span class="hobi-tag">⚽ Olahraga</span>
+            <span class="hobi-tag">🔌 Elektronika</span>
+        </div>
+    </div>
+
+    <!-- ============ KEGIATAN SELAIN KULIAH ============ -->
+    <div class="card">
+        <div class="section-title">
+            <span class="icon">⚡</span>
+            <span>Kegiatan Selain Kuliah</span>
+            <span class="line"></span>
+        </div>
+        <div class="kegiatan-grid">
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">⚽</div>
+                    <div class="kegiatan-title">Olahraga</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Agar kesehatan tetap terjaga dan imunitas tubuh tetap bertahan.
+                </p>
+            </div>
+
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">🏍️</div>
+                    <div class="kegiatan-title">Otomotif</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Modifikasi kendaraan ringan pada kendaraan bermotor yang saya gunakan
+                    sehari-hari untuk berangkat kuliah.
+                </p>
+            </div>
+
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">🎮</div>
+                    <div class="kegiatan-title">Gaming</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Bermain game untuk refresh di tengah banyaknya tugas kuliah yang menumpuk.
+                </p>
+            </div>
+
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">🛣️</div>
+                    <div class="kegiatan-title">Touring</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Sebagai refreshing juga selain bermain game, dan biasanya saya lakukan
+                    ketika libur perkuliahan.
+                </p>
+            </div>
+
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">🔌</div>
+                    <div class="kegiatan-title">Elektronika</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Terkadang saya suka mencoba membuat sesuatu yang berkaitan dengan
+                    kelistrikan.
+                </p>
+            </div>
+
+            <div class="kegiatan-item">
+                <div class="kegiatan-header">
+                    <div class="kegiatan-icon">🎤</div>
+                    <div class="kegiatan-title">Bernyanyi &amp; Musik</div>
+                </div>
+                <p class="kegiatan-desc">
+                    Saya sangat suka mendengarkan musik dan menyanyikannya agar pikiran
+                    saya tetap terjaga atau waras.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ CITA-CITA ============ -->
+    <div class="cita-cita">
+        <div class="cita-cita-icon">🚀</div>
+        <h2>Cita-Cita Saya</h2>
+        <p>
+            Cita-cita saya yaitu saya ingin bekerja di perusahaan ternama seperti
+            <strong>Pertamina</strong>, <strong>BUMN</strong>, <strong>Indobahari</strong>,
+            dan sejenisnya, dengan tujuan saya ingin <strong>membahagiakan kedua orang tua</strong>,
+            dan juga <strong>mewujudkan segala wishlist</strong> yang sudah saya impikan sejak lama,
+            dan juga saya ingin membahagiakan <strong>seseorang yang sangat berarti</strong>
+            bagi kehidupan saya.
+        </p>
+    </div>
+
+    <footer>
+        ⚡ © 2025 Muhammad Ridwan Herlambang · NIM 2405110042<br>
+        Teknik Komputer · Fakultas Teknik · Universitas Negeri Semarang <span class="bolt">⚡</span>
+    </footer>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ============ PARTIKEL ELEKTRON ============ */
+    try {
+        var canvas = document.getElementById('particles');
+        if (canvas && canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+            var pulses = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function makeParticle() {
+                var colors = ['251,191,36', '6,182,212', '0,229,255'];
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    pulsePhase: Math.random() * Math.PI * 2
+                };
+            }
+
+            var count = Math.min(80, Math.floor(window.innerWidth / 22));
+            for (var i = 0; i < count; i++) particles.push(makeParticle());
+
+            var frame = 0;
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                frame++;
+
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = canvas.height;
+                    if (p.y > canvas.height) p.y = 0;
+
+                    // Denyut elektron
+                    var pulse = 0.4 + 0.4 * Math.sin(frame * 0.03 + p.pulsePhase);
+
+                    // Glow
+                    var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
+                    grad.addColorStop(0, 'rgba(' + p.color + ',' + pulse + ')');
+                    grad.addColorStop(1, 'rgba(' + p.color + ',0)');
+                    ctx.beginPath();
+                    ctx.fillStyle = grad;
+                    ctx.arc(p.x, p.y, p.size * 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Inti
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(' + p.color + ',0.9)';
+                    ctx.fill();
+
+                    // Garis koneksi (seperti sirkuit)
+                    for (var j = i + 1; j < particles.length; j++) {
+                        var q = particles[j];
+                        var dx = p.x - q.x, dy = p.y - q.y;
+                        var d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < 130) {
+                            var alpha = 0.12 * (1 - d / 130);
+                            ctx.beginPath();
+                            ctx.strokeStyle = 'rgba(251,191,36,' + alpha + ')';
+                            ctx.lineWidth = 0.8;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(q.x, q.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    } catch (e) { console.warn('Particle error:', e); }
+
+    /* ============ CURSOR SPARK ============ */
+    try {
+        var spark = document.getElementById('cursorSpark');
+        if (spark && window.matchMedia('(hover: hover)').matches) {
+            document.addEventListener('mousemove', function (e) {
+                spark.style.left = e.clientX + 'px';
+                spark.style.top = e.clientY + 'px';
+            });
+        } else if (spark) {
+            spark.style.display = 'none';
+        }
+    } catch (e) { console.warn('Spark error:', e); }
+
+    /* ============ TYPING EFFECT ============ */
+    try {
+        var typedEl = document.getElementById('typed');
+        if (typedEl) {
+            var texts = [
+                '⚡ Teknik Komputer · UNNES',
+                'Fakultas Teknik · Semester 5',
+                'Hardware · Network · Code',
+                'NIM 2405110042'
+            ];
+            var ti = 0, ci = 0, del = false;
+
+            function loop() {
+                var cur = texts[ti];
+                if (!del) {
+                    typedEl.textContent = cur.substring(0, ci + 1);
+                    ci++;
+                    if (ci === cur.length) {
+                        del = true;
+                        setTimeout(loop, 1800);
+                        return;
+                    }
+                } else {
+                    typedEl.textContent = cur.substring(0, ci - 1);
+                    ci--;
+                    if (ci === 0) {
+                        del = false;
+                        ti = (ti + 1) % texts.length;
+                    }
+                }
+                setTimeout(loop, del ? 40 : 90);
+            }
+            loop();
+        }
+    } catch (e) { console.warn('Typing error:', e); }
+
+    /* ============ REVEAL ON SCROLL ============ */
+    try {
+        var els = document.querySelectorAll('.card, .cita-cita');
+        if ('IntersectionObserver' in window) {
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal');
+                        var bars = entry.target.querySelectorAll('.skill-fill');
+                        bars.forEach(function (bar, i) {
+                            setTimeout(function () {
+                                bar.style.width = bar.getAttribute('data-width');
+                            }, 200 + i * 180);
+                        });
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            els.forEach(function (el) { obs.observe(el); });
+        } else {
+            els.forEach(function (el) {
+                el.classList.add('reveal');
+                el.querySelectorAll('.skill-fill').forEach(function (bar) {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            });
+        }
+    } catch (e) { console.warn('Reveal error:', e); }
+
+})();
+</script>
+</body>
+</html>
